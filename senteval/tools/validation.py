@@ -302,7 +302,7 @@ class SplitClassifier2(object):
             clf.fit(self.X['train'], self.y['train'],
                     validation_data=(self.X['valid'], self.y['valid']))
         else:
-            clf = LogisticRegression(C=optreg, random_state=self.seed)
+            clf = LogisticRegression(C=optreg, solver=self.config['solver'], random_state=self.seed)
             clf.fit(self.X['train'], self.y['train'])
 
         testaccuracy = clf.score(self.X['test'], self.y['test'])

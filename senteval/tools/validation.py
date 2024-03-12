@@ -281,8 +281,9 @@ class SplitClassifier2(object):
                 clf.fit(self.X['train'], self.y['train'],
                         validation_data=(self.X['valid'], self.y['valid']))
             else:
-                clf = LogisticRegression(C=reg, random_state=self.seed)
+                clf = LogisticRegression(C=optreg, solver=self.config['solver'], random_state=self.seed)
                 clf.fit(self.X['train'], self.y['train'])
+                return clf
             scores.append(round(100*clf.score(self.X['valid'],
                                 self.y['valid']), 2))
         logging.info([('reg:'+str(regs[idx]), scores[idx])
@@ -291,7 +292,6 @@ class SplitClassifier2(object):
         devaccuracy = np.max(scores)
         logging.info('Validation : best param found is reg = {0} with score \
             {1}'.format(optreg, devaccuracy))
-        clf = LogisticRegression(C=optreg, random_state=self.seed)
         logging.info('Evaluating...')
         if self.usepytorch:
             clf = MLP(self.classifier_config, inputdim=self.featdim,
